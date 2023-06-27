@@ -18,12 +18,11 @@ actor_network = train_cartpole(1e5);
 render_cartpole(actor_network, 200)
 ```
 
-### After 10000 training iterations:
+After 10000 training iterations:
 <img src="doc/cartpole_actor_critic_1e4.gif" style="width:400px"/>
 
-### After 1000000 training iterations:
+After 1000000 training iterations:
 <img src="doc/cartpole_actor_critic_1e6.gif" style="width:400px"/>
-
 
 ## Definitions and notation
 
@@ -35,7 +34,7 @@ render_cartpole(actor_network, 200)
 
 1. Each set of weights is a matrix of real numbers. We represent the $(i,j)^{\text{th}}$ element of the $k^{\text{th}}$ set of weights as $w_{ij}^{(k)}$.
 
-1. For simplified computation, biases are included into the layers and weights. This means that each layer has an extra (zeroth) element that is always equal to 1, and that the zeroth column of each weight matrix contains all the biases. In other words, for all $1 \le m \le L$ and $1 \le n \le W$ we have 
+1. For simplified computation biases are integrated into the weight matrices. This is accomplished by adding a zeroth column to each weight matrix that contains the biases associated with the corresponding layer. Additionally a zeroth element is added to each layer vector that's always equal to 1. Specifically, for all $1 \le m \le L$ and $1 \le n \le W$ we have 
 $$l_0^{(m)} = 1$$
 $$w_{i0}^{(n)} = b_i$$
 
@@ -45,9 +44,13 @@ The simplest MLP we can have contains just 2 layers and 1 set of weights. Given 
 
 $$l_i^{(2)} = \sum_{j=0}^{|l^{(1)}|} w^{(1)}_{ij} l^{(1)}_j$$
 
-We could also represent this expression as matrix-vector multplication. For example, $l^{(2)} = W^{(1)} l^{(1)}$. The element-wise representation is more verbose but it's much easier to work with.
+Note that the sum starts at $j=0$. This is a result of the integrated bias mechanism described above.
+
+We could also represent this expression as matrix-vector multplication. For example, $l^{(2)} = W^{(1)} l^{(1)}$. But despite looking simpler, this representation is more difficult to work with than the element-wise representation.
 
 ## MLP forward propagation
+
+For a general MLP the values of the hidden layers are computed by applying an activation function $\mathcal{A}$:
 
 ### Hidden layers: $2 \le k \le L-1$
 
@@ -55,7 +58,13 @@ $$l_i^{(k)} = \mathcal{A} \left( \sum_{j=0}^{|l^{(k-1)}|} w^{(k-1)}_{ij} l^{(k-1
 
 ### $L^{th}$ layer (output layer)
 
+The outputs are computed without applying an activation function:
+
 $$l_i^{(L)} = \sum_{j=0}^{|l^{(L-1)}|} w^{(L-1)}_{ij} l^{(L-1)}_j$$
+
+ For certain training algorithms, however, other functions are applied to the last outputs. For example, the `softmax()` function is used to convert the outputs to a set of probabilities.
+
+### Code
 
 The forward propagation algorithm is implemented in `propagate.jl`:
 ```
@@ -69,9 +78,9 @@ end
 layers[end].values .= weights[end].values_with_bias * layers[end-1].values_with_bias
 ```
 
-We could also represent this expression in as matrix-vector multplication. For example, $l^{(2)} = W^{(1)} l^{(1)}$. However, the element-wise representation is much easier to work with.
+### Forward propagation as single function
 
-These expressions define a recurrence relation that allows us to express the values of the last layer as a function of the first layer and all the weights:
+The expressions above define a recurrence relation that can be combined to to express the values of the last layer as a function of the first layer (and all the weights):
 
 $$
 \begin{align*} 
