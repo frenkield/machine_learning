@@ -163,26 +163,11 @@ $$
 \frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
 \right] \\
 %
-&= 
-\sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+&= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
 \frac{\partial l_k^{(L)}}{\partial{w_{ij}^{(L-1)}}} \\
 %
-&= 
-\sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+&= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
 \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
 \left[ \sum_{r=0}^{|l^{(L-1)}|} w^{(L-1)}_{kr} l^{(L-1)}_r \right] \\
 %
-
-
-
-
-
-
-
-
-
-
-
-
-
 \end{align*}$$
