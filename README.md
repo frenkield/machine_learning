@@ -80,7 +80,7 @@ layers[end].values .= weights[end].values_with_bias * layers[end-1].values_with_
 
 ### Forward propagation as single function
 
-The expressions above define a recurrence relation that can be combined to to express the values of the last layer as a function of the first layer (and all the weights):
+The expressions above define a recurrence relation that can be combined to express the values of the last layer as a function of the first layer (and all the weights):
 
 $$
 \begin{align*} 
@@ -120,10 +120,47 @@ $$
 
 ## Loss function
 
-Let $X, Y$ a pair of inputs and outputs (a sample). We can evaluate the accuracy of an MLP for this sample using a least squares loss function:
+Let $X$ and $Y$ be a pair of inputs and outputs (a sample). We can evaluate the accuracy of an MLP for this sample using a least squares loss function:
 
-$$ L(X, Y) = \sum \left[ F_\mathcal{A}(X_i) - Y_i \right]^2$$
+$$L(X, Y) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left[ F_\mathcal{A}(X_i) - Y_i \right]^2$$
+
+If we first run forward propagation on the MLP then we have
+$$l_i^{(L)} = F_\mathcal{A}(X_i)$$
+
+And so we can write
+$$L(X, Y) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left[ l_i^{(L)} - Y_i \right]^2$$
+
 
 <!-- Let $\mathcal{S} = \{(X^{(1)}, Y^{(1)}), \dots, (X^{(n)}, Y^{(n)})\}$ be the training data (samples) for an MLP. We can evaluate the accuracy of the MLP using a least squares loss function:
 
 $$ L(\mathcal{S}) = $$ -->
+
+
+## Back propagation function derivation
+
+Given a set of inputs and outputs we improve the accuracy of an MLP by adjusting the weights (and biases). This means that we need to consider the loss function as a function of the weights:
+
+$$L(w^{(1)}, \dots, w^{(W)}) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2$$
+
+We update the weights incrementally by applying the gradient descent algorithm to the loss function. In order to do that we need an expression for the gradient of the loss function with respect to the weights. In other words, for each $1 \le k \le W$, we need to compute the partial derivatives
+
+$$\frac{\partial{L}}{\partial{w_{ij}^{(k)}}}$$
+
+First, let's compute the gradients for the last set of weights:
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(W)}}}
+= \frac{\partial{L}}{\partial{w_{ij}^{(L-1)}}}
+%
+&= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
+\left[
+\frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2
+\right] \\
+%
+&= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
+\left[
+\frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2
+\right] \\
+%
+\end{align*}$$
