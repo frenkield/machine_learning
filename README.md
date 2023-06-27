@@ -140,7 +140,7 @@ $$ L(\mathcal{S}) = $$ -->
 
 Given a set of inputs and outputs we improve the accuracy of an MLP by adjusting the weights (and biases). This means that we need to consider the loss function as a function of the weights:
 
-$$L(w^{(1)}, \dots, w^{(W)}) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2$$
+$$L(w^{(1)}, \dots, w^{(W)}) = \frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2$$
 
 We update the weights incrementally by applying the gradient descent algorithm to the loss function. In order to do that we need an expression for the gradient of the loss function with respect to the weights. In other words, for each $1 \le k \le W$, we need to compute the partial derivatives
 
@@ -155,12 +155,34 @@ $$
 %
 &= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
 \left[
-\frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2
+\frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
 \right] \\
 %
 &= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
 \left[
-\frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left( l_i^{(L)} - Y_i \right)^2
+\frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
 \right] \\
 %
+&= 
+\sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+\frac{\partial l_k^{(L)}}{\partial{w_{ij}^{(L-1)}}} \\
+%
+&= 
+\sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+\frac{\partial}{\partial{w_{ij}^{(L-1)}}}
+\left[ \sum_{r=0}^{|l^{(L-1)}|} w^{(L-1)}_{kr} l^{(L-1)}_r \right] \\
+%
+
+
+
+
+
+
+
+
+
+
+
+
+
 \end{align*}$$
