@@ -179,6 +179,7 @@ and $r=j$, and it's 0 otherwise. We can write this using the Kronecker delta:
 $$\frac{\partial w_{kr}^{(L-1)}}{\partial{w_{ij}^{(L-1)}}} = \delta_{ik} \delta_{jr}$$
 
 The gradients for the last set of weights are thus
+
 $$
 \begin{align*}
 \frac{\partial{L}}{\partial{w_{ij}^{(W)}}}
