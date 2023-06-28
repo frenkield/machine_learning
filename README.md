@@ -170,4 +170,23 @@ $$
 \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
 \left[ \sum_{r=0}^{|l^{(L-1)}|} w^{(L-1)}_{kr} l^{(L-1)}_r \right] \\
 %
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l^{(L-1)}_r
+\frac{\partial w^{(L-1)}_{kr}}{\partial{w_{ij}^{(L-1)}}}
 \end{align*}$$
+In the last step we used the fact that, according to the forward propagation recurrence, the second to last layer $l^{(L-1)}_r$ does not depend on the last set of weights $w_{ij}^{(L-1)}$. That allows us to move $l^{(L-1)}_r$ outside of the partial derivative.
+
+The partial derivative at the end of the last expression is either 1 or 0. It's 1 if both $k=i$ and $r=j$, and it's 0 otherwise. We can write this using the Kronecker delta:
+$$\frac{\partial w^{(L-1)}_{kr}}{\partial{w_{ij}^{(L-1)}}} = \delta_{ik} \delta_{jr}$$
+
+The gradients for the last set of weights are thus
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(W)}}}
+= \frac{\partial{L}}{\partial{w_{ij}^{(L-1)}}}
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l^{(L-1)}_r \delta_{ik} \delta_{jr} \\
+%
+&= \left( l_i^{(L)} - Y_i \right) l^{(L-1)}_j
+%
+\end{align*}
+$$
