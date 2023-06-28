@@ -136,7 +136,7 @@ $$L(X, Y) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left[ l_i^{(L)} - Y_i \right]^2$
 $$ L(\mathcal{S}) = $$ -->
 
 
-## Back propagation function derivation
+## Back propagation recurrence derivation
 
 Given a set of inputs and outputs we improve the accuracy of an MLP by adjusting the weights (and biases). This means that we need to consider the loss function as a function of the weights:
 
@@ -146,17 +146,12 @@ We update the weights incrementally by applying the gradient descent algorithm t
 
 $$\frac{\partial{L}}{\partial{w_{ij}^{(k)}}}$$
 
-First, let's compute the gradients for the last set of weights:
+First let's compute the gradients for the last set of weights:
 
 $$
 \begin{align*}
 \frac{\partial{L}}{\partial{w_{ij}^{(W)}}}
 = \frac{\partial{L}}{\partial{w_{ij}^{(L-1)}}}
-%
-&= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
-\left[
-\frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
-\right] \\
 %
 &= \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
 \left[
@@ -172,7 +167,9 @@ $$
 %
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l_r^{(L-1)}
 \frac{\partial w_{kr}^{(L-1)}}{\partial{w_{ij}^{(L-1)}}}
-\end{align*}$$
+\end{align*}
+$$
+
 In the last step we used the fact that, according to the forward propagation recurrence, the
 second to last layer $l_r^{(L-1)}$ does not depend on the last set of weights $w_{ij}^{(L-1)}$.
 That allows us to move $l_r^{(L-1)}$ outside of the partial derivative.
@@ -191,5 +188,44 @@ $$
 l_r^{(L-1)} \delta_{ik} \delta_{jr} \\
 %
 &= \left( l_i^{(L)} - Y_i \right) l_j^{(L-1)}
+\end{align*}
+$$
+
+
+
+
+
+
+To compute the gradients for the other sets of weights we also need to handle
+derivatives of the activation function $\mathcal{A}$.
+
+For 1 $\le n \le L-2$ (all sets of weights except for the last) we have
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(n)}}}
+%
+&= \frac{\partial}{\partial{w_{ij}^{(n)}}}
+\left[
+\frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
+\right] \\
+%
+&= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+\frac{\partial l_k^{(L)}}{\partial{w_{ij}^{(n)}}} \\
+%
+&= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
+\frac{\partial}{\partial{w_{ij}^{(n)}}}
+\left[ \sum_{r=0}^{|l^{(L-1)}|} w_{kr}^{(L-1)} l_r^{(L-1)} \right] \\
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(n)}}} \\
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\frac{\partial}{\partial{w_{ij}^{(n)}}}
+\left[
+\mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
+%
 \end{align*}
 $$
