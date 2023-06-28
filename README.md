@@ -220,6 +220,12 @@ $$
 \left[
 \mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
 %
+\end{align*}
+$$
+
+
+$$
+\begin{align*}
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
 \left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
 \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
