@@ -42,7 +42,7 @@ $$w_{i0}^{(n)} = b_i$$
 
 The simplest MLP we can have contains just 2 layers and 1 set of weights. Given the first layer (inputs), we compute the values of the second layer via
 
-$$l_i^{(2)} = \sum_{j=0}^{|l^{(1)}|} w^{(1)}_{ij} l^{(1)}_j$$
+$$l_i^{(2)} = \sum_{j=0}^{|l^{(1)}|} w_{ij}^{(1)} l_j^{(1)}$$
 
 Note that the sum starts at $j=0$. This is a result of the integrated bias mechanism described above.
 
@@ -54,13 +54,13 @@ For a general MLP the values of the hidden layers are computed by applying an ac
 
 ### Hidden layers: $2 \le k \le L-1$
 
-$$l_i^{(k)} = \mathcal{A} \left( \sum_{j=0}^{|l^{(k-1)}|} w^{(k-1)}_{ij} l^{(k-1)}_j \right)$$
+$$l_i^{(k)} = \mathcal{A} \left( \sum_{j=0}^{|l^{(k-1)}|} w_{ij}^{(k-1)} l_j^{(k-1)} \right)$$
 
 ### $L^{th}$ layer (output layer)
 
 The outputs are computed without applying an activation function:
 
-$$l_i^{(L)} = \sum_{j=0}^{|l^{(L-1)}|} w^{(L-1)}_{ij} l^{(L-1)}_j$$
+$$l_i^{(L)} = \sum_{j=0}^{|l^{(L-1)}|} w_{ij}^{(L-1)} l_j^{(L-1)}$$
 
  For certain training algorithms, however, other functions are applied to the last outputs. For example, the `softmax()` function is used to convert the outputs to a set of probabilities.
 
@@ -99,7 +99,7 @@ l_i^{(L)} &= \sum_{j=0}^{|l^{L-1}|} w_{ij}^{(L-1)} l_j^{L-1} \\
 &= \sum_{j_{L-1}=0}^{|l^{L-1}|} w_{ij_{L-1}}^{(L-1)} \mathcal{A} \left(
 \sum_{j_{L-2}=0}^{|l^{(L-2)}|} w_{j_{L-1} j_{L-2}}^{(L-2)}
 \mathcal{A} \left( \dots
-\mathcal{A} \left( \sum_{j_1=0}^{|l^{(1)}|} w_{j_2 j_1}^{(1)} l^{(1)}_{j_1}
+\mathcal{A} \left( \sum_{j_1=0}^{|l^{(1)}|} w_{j_2 j_1}^{(1)} l_{j_1}^{(1)}
 \right) \right) \right)
 %
 \end{align*}
@@ -113,7 +113,7 @@ $$
 Y_i = F_\mathcal{A}(X_i) = \sum_{j_{L-1}=0}^{|l^{(L-1)}|} w_{ij_{L-1}}^{(L-1)} \mathcal{A} \left(
 \sum_{j_{L-2}=0}^{|l^{(L-2)}|} w_{j_{L-1}^{(L-2)} j_{L-2}}
 \mathcal{A} \left( \dots
-\mathcal{A} \left( \sum_{j_1=0}^{|l^{(1)}|} w^{(1)}_{j_2 j_1} X{j_1}
+\mathcal{A} \left( \sum_{j_1=0}^{|l^{(1)}|} w_{j_2 j_1}^{(1)} X{j_1}
 \right) \right) \right)
 $$
 
@@ -168,15 +168,18 @@ $$
 %
 &= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
 \frac{\partial}{\partial{w_{ij}^{(L-1)}}}
-\left[ \sum_{r=0}^{|l^{(L-1)}|} w^{(L-1)}_{kr} l^{(L-1)}_r \right] \\
+\left[ \sum_{r=0}^{|l^{(L-1)}|} w_{kr}^{(L-1)} l_r^{(L-1)} \right] \\
 %
-&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l^{(L-1)}_r
-\frac{\partial w^{(L-1)}_{kr}}{\partial{w_{ij}^{(L-1)}}}
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l_r^{(L-1)}
+\frac{\partial w_{kr}^{(L-1)}}{\partial{w_{ij}^{(L-1)}}}
 \end{align*}$$
-In the last step we used the fact that, according to the forward propagation recurrence, the second to last layer $l^{(L-1)}_r$ does not depend on the last set of weights $w_{ij}^{(L-1)}$. That allows us to move $l^{(L-1)}_r$ outside of the partial derivative.
+In the last step we used the fact that, according to the forward propagation recurrence, the
+second to last layer $l_r^{(L-1)}$ does not depend on the last set of weights $w_{ij}^{(L-1)}$.
+That allows us to move $l_r^{(L-1)}$ outside of the partial derivative.
 
-The partial derivative at the end of the last expression is either 1 or 0. It's 1 if both $k=i$ and $r=j$, and it's 0 otherwise. We can write this using the Kronecker delta:
-$$\frac{\partial w^{(L-1)}_{kr}}{\partial{w_{ij}^{(L-1)}}} = \delta_{ik} \delta_{jr}$$
+The partial derivative at the end of the last expression is either 1 or 0. It's 1 if both $k=i$
+and $r=j$, and it's 0 otherwise. We can write this using the Kronecker delta:
+$$\frac{\partial w_{kr}^{(L-1)}}{\partial{w_{ij}^{(L-1)}}} = \delta_{ik} \delta_{jr}$$
 
 The gradients for the last set of weights are thus
 $$
@@ -184,9 +187,9 @@ $$
 \frac{\partial{L}}{\partial{w_{ij}^{(W)}}}
 = \frac{\partial{L}}{\partial{w_{ij}^{(L-1)}}}
 %
-&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right) l^{(L-1)}_r \delta_{ik} \delta_{jr} \\
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|} \left( l_k^{(L)} - Y_k \right)
+l_r^{(L-1)} \delta_{ik} \delta_{jr} \\
 %
-&= \left( l_i^{(L)} - Y_i \right) l^{(L-1)}_j
-%
+&= \left( l_i^{(L)} - Y_i \right) l_j^{(L-1)}
 \end{align*}
 $$
