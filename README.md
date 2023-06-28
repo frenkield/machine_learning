@@ -131,11 +131,6 @@ And so we can write
 $$L(X, Y) = \frac{1}{2} \sum_{i=1}^{|l^{(L)}|} \left[ l_i^{(L)} - Y_i \right]^2$$
 
 
-<!-- Let $\mathcal{S} = \{(X^{(1)}, Y^{(1)}), \dots, (X^{(n)}, Y^{(n)})\}$ be the training data (samples) for an MLP. We can evaluate the accuracy of the MLP using a least squares loss function:
-
-$$ L(\mathcal{S}) = $$ -->
-
-
 ## Back propagation recurrence derivation
 
 Given a set of inputs and outputs we improve the accuracy of an MLP by adjusting the weights (and biases). This means that we need to consider the loss function as a function of the weights:
@@ -196,37 +191,46 @@ $$
 
 
 
-
-To compute the gradients for the other sets of weights we also need to handle
-derivatives of the activation function $\mathcal{A}$.
-
-For 1 $\le n \le L-2$ (all sets of weights except for the last) we have
+To compute the gradients for the other sets of weights we also need to handle derivatives of the activation function $\mathcal{A}$.
+For the second to last set of weights we have
 
 $$
 \begin{align*}
-\frac{\partial{L}}{\partial{w_{ij}^{(n)}}}
+\frac{\partial{L}}{\partial{w_{ij}^{(L-2)}}}
 %
-&= \frac{\partial}{\partial{w_{ij}^{(n)}}}
+&= \frac{\partial}{\partial{w_{ij}^{(L-2)}}}
 \left[
 \frac{1}{2} \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)^2
 \right] \\
 %
 &= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
-\frac{\partial l_k^{(L)}}{\partial{w_{ij}^{(n)}}} \\
+\frac{\partial l_k^{(L)}}{\partial{w_{ij}^{(L-2)}}} \\
 %
 &= \sum_{k=1}^{|l^{(L)}|} \left( l_k^{(L)} - Y_k \right)
-\frac{\partial}{\partial{w_{ij}^{(n)}}}
+\frac{\partial}{\partial{w_{ij}^{(L-2)}}}
 \left[ \sum_{r=0}^{|l^{(L-1)}|} w_{kr}^{(L-1)} l_r^{(L-1)} \right] \\
 %
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
 \left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
-\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(n)}}} \\
+\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-2)}}} \\
 %
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
 \left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
-\frac{\partial}{\partial{w_{ij}^{(n)}}}
+\frac{\partial}{\partial{w_{ij}^{(L-2)}}}
 \left[
 \mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
+\frac{\partial}{\partial{w_{ij}^{(L-2)}}}
+\left[
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
+\right] \\
+%
+&= \sum_{k=1}^{|l^{(L)}|}
+\left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
+\mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{is}^{(L-2)} l_s^{(L-2)} \right) l_j^{(L-2)} \\
 %
 \end{align*}
 $$
