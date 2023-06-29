@@ -219,6 +219,7 @@ $$
 In that last step we were able to move $w_{kr}^{(L-1)}$ outside the derivative
 since we're taking the derivative with respect to a different set of weights.
 Focusing on the partial derivative, we then have
+
 $$
 \begin{align*}
 \frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-2)}}}
@@ -244,3 +245,14 @@ $$
 %
 \end{align*}
 $$
+
+We now define another function that simplifies the notation. We'll explain
+later why this notation is useful.
+
+$$
+\mathcal{D}_\mathcal{A}(l_r^{(n)}) = \mathcal{A}' \left( \sum_{s=0}^{|l^{(n-1)}|} w_{rs}^{(n-1)} l_s^{(n-1)}
+\right)
+$$
+
+We now have the following expression for the gradients of the second to last
+set of weights:
