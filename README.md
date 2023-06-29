@@ -232,15 +232,15 @@ $$
 &= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
 \frac{\partial}{\partial{w_{ij}^{(L-2)}}}
 \left[
-\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
+\sum_{t=0}^{|l^{(L-2)}|} w_{rt}^{(L-2)} l_t^{(L-2)}
 \right] \\
 %
 &= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
-\sum_{s=0}^{|l^{(L-2)}|} l_s^{(L-2)}
-\frac{\partial w_{rs}^{(L-2)}}{\partial{w_{ij}^{(L-2)}}} \\
+\sum_{t=0}^{|l^{(L-2)}|} l_t^{(L-2)}
+\frac{\partial w_{rt}^{(L-2)}}{\partial{w_{ij}^{(L-2)}}} \\
 %
-&= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
-\sum_{s=0}^{|l^{(L-2)}|} l_s^{(L-2)} \delta_{ir} \delta_{js} \\
+&= \mathcal{A}' \left( \sum_{t=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_t^{(L-2)} \right)
+\sum_{t=0}^{|l^{(L-2)}|} l_t^{(L-2)} \delta_{ir} \delta_{jt} \\
 %
 &= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
 \right) l_j^{(L-2)} \delta_{ir}
@@ -258,3 +258,19 @@ $$
 
 Putting everything together we now have the following expression for the
 gradients of the second to last set of weights:
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(L-2)}}}
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\mathcal D_{\mathcal A}(l_r^{(n)}) l_j^{(L-2)} \delta_{ir} \\
+%
+&= \sum_{k=1}^{|l^{(L)}|}
+\left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
+\mathcal D_{\mathcal A}(l_i^{(n)}) l_j^{(L-2)}
+%
+\end{align*}
+$$
+
