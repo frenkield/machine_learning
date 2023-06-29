@@ -250,9 +250,9 @@ We now define another function that simplifies the notation. We'll explain
 later why this notation is useful.
 
 $$
-\mathcal{D}_\mathcal{A}(l_r^{(n)}) = \mathcal{A}' \left( \sum_{s=0}^{|l^{(n-1)}|} w_{rs}^{(n-1)} l_s^{(n-1)}
-\right)
+\mathcal D_{\mathcal A}(l_r^{(n)}) = \mathcal{A}'
+\left( \sum_{s=0}^{|l^{(n-1)}|} w_{rs}^{(n-1)} l_s^{(n-1)} \right)
 $$
 
-We now have the following expression for the gradients of the second to last
-set of weights:
+Putting everything together we now have the following expression for the
+gradients of the second to last set of weights:
