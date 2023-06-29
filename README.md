@@ -141,6 +141,8 @@ We update the weights incrementally by applying the gradient descent algorithm t
 
 $$\frac{\partial{L}}{\partial{w_{ij}^{(k)}}}$$
 
+### Gradients for last set of weights
+
 First let's compute the gradients for the last set of weights:
 
 $$
@@ -189,7 +191,7 @@ $$
 
 
 
-
+### Gradients for second to last set of weights
 
 To compute the gradients for the other sets of weights we also need to handle derivatives of the activation function $\mathcal{A}$.
 For the second to last set of weights we have
