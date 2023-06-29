@@ -265,12 +265,13 @@ $$
 %
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
 \left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
-\mathcal D_{\mathcal A}(l_r^{(n)}) l_j^{(L-2)} \delta_{ir} \\
+\mathcal D_{\mathcal A}(l_r^{(L-1)}) l_j^{(L-2)} \delta_{ir} \\
 %
 &= \sum_{k=1}^{|l^{(L)}|}
 \left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
-\mathcal D_{\mathcal A}(l_i^{(n)}) l_j^{(L-2)}
+\mathcal D_{\mathcal A}(l_i^{(L-1)}) l_j^{(L-2)}
 %
 \end{align*}
 $$
 
+More to come...
