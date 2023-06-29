@@ -141,6 +141,8 @@ We update the weights incrementally by applying the gradient descent algorithm t
 
 $$\frac{\partial{L}}{\partial{w_{ij}^{(k)}}}$$
 
+### Gradients for last set of weights
+
 First let's compute the gradients for the last set of weights:
 
 $$
@@ -189,7 +191,7 @@ $$
 
 
 
-
+### Gradients for second to last set of weights
 
 To compute the gradients for the other sets of weights we also need to handle derivatives of the activation function $\mathcal{A}$.
 For the second to last set of weights we have
@@ -213,30 +215,46 @@ $$
 &= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
 \left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
 \frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-2)}}} \\
-%
-&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
-\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
-\frac{\partial}{\partial{w_{ij}^{(L-2)}}}
-\left[
-\mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
-%
 \end{align*}
 $$
 
+In that last step we were able to move $w_{kr}^{(L-1)}$ outside the derivative
+since we're taking the derivative with respect to a different set of weights.
+Focusing on the partial derivative, we then have
 
 $$
 \begin{align*}
-&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
-\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
-\mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
+\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-2)}}}
+&= \frac{\partial}{\partial{w_{ij}^{(L-2)}}}
+\left[
+\mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
+%
+&= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
 \frac{\partial}{\partial{w_{ij}^{(L-2)}}}
 \left[
 \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
 \right] \\
 %
-&= \sum_{k=1}^{|l^{(L)}|}
-\left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
-\mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{is}^{(L-2)} l_s^{(L-2)} \right) l_j^{(L-2)} \\
+&= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
+\sum_{s=0}^{|l^{(L-2)}|} l_s^{(L-2)}
+\frac{\partial w_{rs}^{(L-2)}}{\partial{w_{ij}^{(L-2)}}} \\
+%
+&= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right)
+\sum_{s=0}^{|l^{(L-2)}|} l_s^{(L-2)} \delta_{ir} \delta_{js} \\
+%
+&= \mathcal{A}' \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
+\right) l_j^{(L-2)} \delta_{ir}
 %
 \end{align*}
 $$
+
+We now define another function that simplifies the notation. We'll explain
+later why this notation is useful.
+
+$$
+\mathcal D_{\mathcal A}(l_r^{(n)}) = \mathcal{A}'
+\left( \sum_{s=0}^{|l^{(n-1)}|} w_{rs}^{(n-1)} l_s^{(n-1)} \right)
+$$
+
+Putting everything together we now have the following expression for the
+gradients of the second to last set of weights:
