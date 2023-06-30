@@ -304,38 +304,14 @@ $$
 \left[
 \mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
 %
-% &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
-% \frac{\partial}{\partial w_{ij}^{(L-3)}}
-% \left[
-% \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
-% \right] \\
-%
 &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
 \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
 \frac{\partial l_s^{(L-2)}}{\partial w_{ij}^{(L-3)}} \\
-%
-% &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
-% \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
-% \frac{\partial}{\partial w_{ij}^{(L-3)}}
-% \left[
-% \mathcal{A} \left( \sum_{t=0}^{|l^{(L-3)}|} w_{st}^{(L-3)} l_t^{(L-3)} \right) \right] \\
-%
-% &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
-% \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
-% \mathcal D_{\mathcal A}(l_s^{(L-2)})
-% \frac{\partial}{\partial w_{ij}^{(L-3)}}
-% \left[
-% \sum_{t=0}^{|l^{(L-3)}|} w_{st}^{(L-3)} l_t^{(L-3)} \right] \\
 %
 &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
 \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
 \mathcal D_{\mathcal A}(l_s^{(L-2)})
 \sum_{t=0}^{|l^{(L-3)}|} l_t^{(L-3)} \delta_{is} \delta_{jt} \\
-%
-% &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
-% \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
-% \mathcal D_{\mathcal A}(l_s^{(L-2)})
-% l_j^{(L-3)} \delta_{is} \\
 %
 &= \mathcal D_{\mathcal A}(l_r^{(L-1)})
 w_{ri}^{(L-2)}
@@ -392,7 +368,5 @@ l_j^{(L-3)}
 \end{align*}
 $$
 
-
-
-
-
+We now have what looks like the recurrence relation that we
+need.
