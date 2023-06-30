@@ -347,3 +347,43 @@ $$
 
 Putting everything together we now have the following expression for the
 gradients of the third to last set of weights:
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(L-3)}}}
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\mathcal D_{\mathcal A}(l_r^{(L-1)})
+w_{ri}^{(L-2)}
+\mathcal D_{\mathcal A}(l_i^{(L-2)})
+l_j^{(L-3)}
+%
+\end{align*}
+$$
+
+And now let's swap the indices $i$ and $r$:
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{rj}^{(L-3)}}}
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{i=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
+\mathcal D_{\mathcal A}(l_i^{(L-1)})
+w_{ir}^{(L-2)}
+\mathcal D_{\mathcal A}(l_r^{(L-2)})
+l_j^{(L-3)} \\
+%
+&= \sum_{i=0}^{|l^{(L-1)}|} \left[ \sum_{k=1}^{|l^{(L)}|}
+\left( l_k^{(L)} - Y_k \right) w_{ki}^{(L-1)}
+\mathcal D_{\mathcal A}(l_i^{(L-1)}) \right]
+w_{ir}^{(L-2)}
+\mathcal D_{\mathcal A}(l_r^{(L-2)})
+l_j^{(L-3)} \\
+%
+\end{align*}
+$$
+
+
+
