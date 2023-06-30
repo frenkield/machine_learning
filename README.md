@@ -274,4 +274,76 @@ $$
 \end{align*}
 $$
 
-More to come...
+
+
+
+
+### Gradients for the third to last set of weights
+
+Once we compute the gradients for the third to last set of weights the
+recurrence will become apparent.
+
+$$
+\begin{align*}
+\frac{\partial{L}}{\partial{w_{ij}^{(L-3)}}}
+%
+&= \sum_{k=1}^{|l^{(L)}|} \sum_{r=0}^{|l^{(L-1)}|}
+\left( l_k^{(L)} - Y_k \right) w_{kr}^{(L-1)}
+\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-3)}}} \\
+%
+%
+\end{align*}
+$$
+
+And then
+
+$$
+\begin{align*}
+\frac{\partial l_r^{(L-1)}}{\partial{w_{ij}^{(L-3)}}}
+&= \frac{\partial}{\partial{w_{ij}^{(L-3)}}}
+\left[
+\mathcal{A} \left( \sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)} \right) \right] \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\frac{\partial}{\partial w_{ij}^{(L-3)}}
+\left[
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)} l_s^{(L-2)}
+\right] \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
+\frac{\partial l_s^{(L-2)}}{\partial w_{ij}^{(L-3)}} \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
+\frac{\partial}{\partial w_{ij}^{(L-3)}}
+\left[
+\mathcal{A} \left( \sum_{t=0}^{|l^{(L-3)}|} w_{st}^{(L-3)} l_t^{(L-3)} \right) \right] \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
+\mathcal D_{\mathcal A}(l_s^{(L-2)})
+\frac{\partial}{\partial w_{ij}^{(L-3)}}
+\left[
+\sum_{t=0}^{|l^{(L-3)}|} w_{st}^{(L-3)} l_t^{(L-3)} \right] \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
+\mathcal D_{\mathcal A}(l_s^{(L-2)})
+\sum_{t=0}^{|l^{(L-3)}|} l_t^{(L-3)} \delta_{is} \delta_{jt} \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+\sum_{s=0}^{|l^{(L-2)}|} w_{rs}^{(L-2)}
+\mathcal D_{\mathcal A}(l_s^{(L-2)})
+l_j^{(L-3)} \delta_{is} \\
+%
+&= \mathcal D_{\mathcal A}(l_r^{(L-1)})
+w_{ri}^{(L-2)}
+\mathcal D_{\mathcal A}(l_i^{(L-2)})
+l_j^{(L-3)} \\
+%
+\end{align*}
+$$
+
+Putting everything together we now have the following expression for the
+gradients of the third to last set of weights:
